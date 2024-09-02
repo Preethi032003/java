@@ -1,0 +1,65 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class FoodDeliverySystem {
+    private List<MenuItem> menu;
+    private List<User> users;
+
+    public FoodDeliverySystem() {
+        menu = new ArrayList<>();
+        users = new ArrayList<>();
+        initializeMenu();
+    }
+
+    private void initializeMenu() {
+        menu.add(new MenuItem("Pizza", 10.99));
+        menu.add(new MenuItem("Burger", 5.49));
+        menu.add(new MenuItem("Pasta", 8.99));
+    }
+
+    private void displayMenu() {
+        System.out.println("Menu:");
+        for (int i = 0; i < menu.size(); i++) {
+            System.out.println((i + 1) + ". " + menu.get(i));
+        }
+    }
+
+    private User getUserInput() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter your address: ");
+        String address = scanner.nextLine();
+        return new User(name, address);
+    }
+
+    private void placeOrder(User user) {
+        Scanner scanner = new Scanner(System.in);
+        Order order = new Order(user);
+        displayMenu();
+        System.out.println("Select items by number (0 to finish):");
+        while (true) {
+            int choice = scanner.nextInt();
+            if (choice == 0) {
+                break;
+            }
+            if (choice > 0 && choice <= menu.size()) {
+                order.addItem(menu.get(choice - 1));
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+        System.out.println("\n" + order);
+    }
+
+    public void run() {
+        User user = getUserInput();
+        placeOrder(user);
+    }
+
+    public static void main(String[] args) {
+        FoodDeliverySystem system = new FoodDeliverySystem();
+        system.run();
+    }
+}
